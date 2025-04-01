@@ -17,3 +17,11 @@
 ### Managing containers life cycle using CRE (container runtime engines)
 
 <img src="cre1.png">
+
+
+## COntainer runtime Engine -- Docker 
+
+### Installing Docker on win / mac -- using Docker Desktop 
+### Docker in windows & mac will be having linux kernel support only 
+
+<img src="cre2.png">
