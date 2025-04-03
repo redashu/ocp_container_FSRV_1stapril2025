@@ -12,3 +12,11 @@
 ### compose commands 
 
 <img src="compose2.png">
+
+## application containerziation 
+
+<img src="appc1.png">
+
+### container image builders 
+
+<img src="appc2.png">
