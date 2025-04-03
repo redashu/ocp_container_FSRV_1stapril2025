@@ -1,5 +1,12 @@
 version: '3.8'
 services:
+  ashupyapp:
+    image: ashupy:imag1 
+    build:
+      context: pythonapp
+      dockerfile: Dockerfile 
+    container_name: ashuypyc1 
+    tty: True 
   ashuapp:
     image: ubuntu
     container_name: ashucc11 

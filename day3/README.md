@@ -27,3 +27,6 @@
 
 ### creating container 
 <img src="appc4.png">
+
+### compsoe app build 
+<img src="appc5.png">
