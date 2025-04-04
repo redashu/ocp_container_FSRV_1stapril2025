@@ -33,3 +33,12 @@
 ### nginx port forward 
 
 <img src="cnet5.png">
+
+
+### Container registry  related data 
+
+<img src="reg1.png">
+
+<img src="reg2.png">
+<img src="reg3.png">
+<img src="reg14.png">
