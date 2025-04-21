@@ -42,3 +42,16 @@ oc create  deployment  ashu-dep1  --image docker.io/dockerashu/ashufsrv:appv2 --
 ===>
 oc create -f deploy1.yaml 
 ```
+
+### access to pod container 
+
+```
+PS C:\Users\labuser> oc  exec -it ashu-deploy-6dcfbdf5d4-268j7 -- /bin/sh
+sh-4.4#
+sh-4.4#
+sh-4.4# cd /var/www/html/
+sh-4.4# ls
+images  index.html  styles
+sh-4.4# exit
+exit
+```
