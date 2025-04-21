@@ -33,3 +33,12 @@ You have access to the following projects and can switch between them with ' pro
     kube-node-lease
     kube-public
 ```
+
+### Creating deployment yaml using oc 
+
+```bash
+oc create  deployment  ashu-dep1  --image docker.io/dockerashu/ashufsrv:appv2 --dry-run=client -o yaml  >deploy1.yaml
+
+===>
+oc create -f deploy1.yaml 
+```
