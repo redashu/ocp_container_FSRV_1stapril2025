@@ -120,3 +120,64 @@ amit-lb1     ClusterIP   172.30.204.248   <none>        80/TCP    24s
 ashi-lb1     ClusterIP   172.30.71.7      <none>        80/TCP    73s
 ashu-lb1     ClusterIP   172.30.254.235   <none>        80/TCP    6s
 ```
+
+### creating route  of unsecure type 
+
+```
+PS C:\Users\labuser\Desktop\ashu-project\ashu_ssl_app> oc  expose  service  ashu-lb1  --name ashu-app1 --dry-run=client -o yaml 
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-dep1
+  name: ashu-app1
+spec:
+  port:
+    targetPort: 80
+  to:
+    kind: ""
+    name: ashu-lb1
+    weight: null
+status: {}
+PS C:\Users\labuser\Desktop\ashu-project\ashu_ssl_app> oc  expose  service  ashu-lb1  --name ashu-app1 --dry-run=client -o yaml >ashuroute1.yaml 
+
+===> 
+oc create -f ashuroute1.yaml 
+oc get route
+
+```
+
+## Edge termination type tLS 
+
+<img src="ssl1.png">
+
+### Creating route of Edge 
+
+```
+PS C:\Users\labuser\Desktop\ashu-project\ashu_ssl_app> oc create route  edge ashu-app2  --service ashu-lb1 --dry-run=client -o yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-dep1
+  name: ashu-app2
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: ""
+    name: ashu-lb1
+    weight: null
+status: {}
+PS C:\Users\labuser\Desktop\ashu-project\ashu_ssl_app> oc create route  edge ashu-app2  --service ashu-lb1 --dry-run=client -o yaml >ashu_edge.yaml
+PS C:\Users\labuser\Desktop\ashu-project\ashu_ssl_app> oc create  -f .\ashu_edge.yaml
+route.route.openshift.io/ashu-app2 created
+
+```
+
+### Passthrough TLS route 
+
+<img src="pass1.png">
+
