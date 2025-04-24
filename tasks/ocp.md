@@ -10,3 +10,11 @@
 5. make sure you are doing in your custom project  yourname-fiserv
 
 ```
+</p>
+</details>
+
+## Creating storage using secret and mount insid pod 
+
+<img src="task1.png">
+
+
