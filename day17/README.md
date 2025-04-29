@@ -123,3 +123,87 @@ ashu-route   ashuapp.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io
 
 ```
 
+## Storage in OCP platform 
+
+### info about CSI 
+
+<img src="st1.png">
+
+### to USe storage class we need to create PV , PVC in ocp 
+
+<img src="st2.png">
+
+### checking storage class if we have 
+
+```
+humanfirmware@darwin  ~  oc  get  storageclass 
+NAME                    PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+azurefile-csi           file.csi.azure.com   Delete          Immediate              true                   9d
+managed-csi (default)   disk.csi.azure.com   Delete          WaitForFirstConsumer   true                   9d
+ humanfirmware@darwin  ~  
+ humanfirmware@darwin  ~  
+ humanfirmware@darwin  ~  oc  get  sc           
+NAME                    PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+azurefile-csi           file.csi.azure.com   Delete          Immediate              true                   9d
+managed-csi (default)   disk.csi.azure.com   Delete          WaitForFirstConsumer   true                   9d
+ humanfirmware@darwin  ~  
+
+```
+
+## PV and PVC 
+
+<img src="pv1.png">
+
+### Storage in OCP 
+
+<img src="pv2.png">
+
+## Creating PVc using dynamic storage class 
+
+```bash
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ashu-pvc1 # name of pvc 
+spec:
+  accessModes:
+    - ReadWriteMany # many ocp nodes can do RW operations 
+  storageClassName: azurefile-csi # name of storage class 
+  resources:
+    requests:
+      storage: 10Gi  # size of claim 5 to 15 GB 
+
+
+===>
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy>
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc  get  sc
+NAME                    PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+azurefile-csi           file.csi.azure.com   Delete          Immediate              true                   9d 
+managed-csi (default)   disk.csi.azure.com   Delete          WaitForFirstConsumer   true                   9d 
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc  create  -f  .\ashu-pvc.yaml
+persistentvolumeclaim/ashu-pvc1 created
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc  get  pvc
+NAME          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS    VOLUMEATTRIBUTESCLASS   AGE
+ashu-pvc1     Bound    pvc-05a0b89a-5268-4809-a836-0adf65096800   10Gi       RWX            azurefile-csi   <unset>                 7s 
+rayudu-pvc1   Bound    pvc-31b772aa-53bd-4ce0-907b-a7e19e8dcbcc   10Gi       RWX            azurefile-csi   <unset>                 2s 
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> 
+
+```
+
+### Due to dynamic storage class PV got automatically created
+
+```
+ humanfirmware@darwin  ~/Desktop/demos  oc get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS    VOLUMEATTRIBUTESCLASS   REASON   AGE
+pvc-05a0b89a-5268-4809-a836-0adf65096800   10Gi       RWX            Delete           Bound    default/ashu-pvc1     azurefile-csi   <unset>                          2m32s
+pvc-31b772aa-53bd-4ce0-907b-a7e19e8dcbcc   10Gi       RWX            Delete           Bound    default/rayudu-pvc1   azurefile-csi   <unset>                          2m28s
+pvc-75ccb820-7712-40f8-a944-cd6666c5f806   15Gi       RWX            Delete           Bound    default/rohan-pvc1    azurefile-csi   <unset>                          2m17s
+pvc-83248ce2-112d-4ab7-a2b8-6805255e8466   5Gi        RWX            Delete           Bound    default/asif-pvc1     azurefile-csi   <unset>                          2m5s
+pvc-8efe69a2-6d11-450d-bfff-2a9071fc352e   10Gi       RWX            Delete           Bound    default/krish-pvc1    azurefile-csi   <unset>                          2m22s
+pvc-97fddbb5-673b-4802-824b-0dda5fbc943e   12Gi       RWX            Delete           Bound    default/amit-pvc1     azurefile-csi   <unset>                          2m5s
+pvc-aaccc827-0066-473f-b5f5-45ecc94602de   10Gi       RWX            Delete           Bound    default/jh-pvc1       azurefile-csi   <unset>                          52s
+pvc-fc6c8cf4-123e-43ee-bce4-95213110a8e8   5Gi        RWX            Delete           Bound    default/manoj-pvc1    azurefile-csi   <unset>                          2m16s
+ humanfirmware@darwin  ~/Desktop/demos  
+
+```
+
