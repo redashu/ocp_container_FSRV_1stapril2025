@@ -94,3 +94,32 @@ rayudu-ssl-app   1/1     1            1           2s
 PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp
 
 ```
+
+### creating service by exposing deployment 
+
+```
+oc  expose deployment ashu-ssl-app   --type ClusterIP --port 443 --target-port 443 --name ashu-lb 
+
+```
+## Now finally route 
+
+```
+ oc create route passthrough  ashu-route --service ashu-lb16  --port 443  
+--hostname  ashuapp.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io --dry-run=client -o yaml >route1.yaml
+
+
+===>
+
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc create route passthrough  ashu-route --service ashu-lb16  --port 443  
+--hostname  ashuapp.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io --dry-run=client -o yaml >route1.yaml 
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy>
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy>
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc  create -f  .\route1.yaml
+route.route.openshift.io/ashu-route created
+PS C:\Users\labuser\Desktop\ashu-project\ssl_ocp_nginx\ocp_deploy> oc  get routes
+NAME         HOST/PORT                                          PATH   SERVICES    PORT   TERMINATION   WILDCARD
+amit-route   amitapp.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io          amit-lb16   443    passthrough   None
+ashu-route   ashuapp.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io     
+
+```
+
