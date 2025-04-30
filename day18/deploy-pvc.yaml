@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-ssl-app
+  name: ashu-ssl-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-ssl-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-ssl-app
+    spec:
+      volumes: # creating volume 
+      - name: ashu-volume1 # name of volume 
+        persistentVolumeClaim:  # keyword to call PVC
+          claimName: ashu-pvc1 # name of pvc 
+      imagePullSecrets: # calling secret to pull image 
+      - name: ashu-secret # name of secret in current project 
+      containers:
+      - image: fiservclass.azurecr.io/ashussl:fiservssl
+        name: ashussl
+        volumeMounts: # mounting volume to container 
+        - name: ashu-volume1 # name of volume 
+          mountPath: /mnt/ashu-data/ # path inside container 
+        ports:
+        - containerPort: 443
+        resources: {}
+status: {}

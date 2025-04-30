@@ -44,3 +44,24 @@ spec:
     requests:
       storage: 10Gi  # size of claim 5 to 15 GB 
 ```
+
+## Creating pod with consuming pvc 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+```
+
