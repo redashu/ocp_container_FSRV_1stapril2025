@@ -23,6 +23,10 @@
 
 [click_here](https://kubernetes.io/docs/concepts/storage/volumes/)
 
+### Storage class Info in k8s / ocp 
+
+[click_here](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+
 
 
 
