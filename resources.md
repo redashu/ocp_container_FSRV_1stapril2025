@@ -28,5 +28,14 @@
 [click_here](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 
 
+### HElM resources 
+
+[click_here](https://helm.sh/docs/intro/quickstart/)
+
+### More info about HELM 
+
+[click_here](https://github.com/redashu/k8s/tree/helm)
+
+
 
 
