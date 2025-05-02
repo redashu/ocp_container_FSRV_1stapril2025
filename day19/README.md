@@ -84,3 +84,76 @@ PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app>
 
 
 ```
+
+### Creating adminer webui deployemnt 
+
+```
+oc  create  deployment ashu-web --image fiservclass.azurecr.io/adminer:v1  --port 8080  --dry-run=client -o yaml >ashu_deploy_web.yaml
+
+===> Some modification like updating image pull secrets 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-web
+  name: ashu-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-web
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-web
+    spec:
+      imagePullSecrets:
+      - name: ashu-secret
+      containers:
+      - image: fiservclass.azurecr.io/adminer:v1
+        name: adminer
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
+
+
+==>
+
+
+ oc  create -f .\ashu_deploy_web.yaml
+deployment.apps/ashu-web created
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> 
+
+===> creating service for web app
+
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  get deploy
+NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+amit-mysql        1/1     1            1           21m
+amit-web          1/1     1            1           2m43s
+ashu-mysql        1/1     1            1           21m
+ashu-web          1/1     1            1           3m39s
+asif-deploy       0/1     1            0           37m
+asif-web          1/1     1            1           2m28s
+jh-mysql          0/1     1            0           22m
+manoj-mysql       1/1     1            1           21m
+manoj-web         1/1     1            1           3m39s
+rayu-mysql        1/1     1            1           19m
+rayu-web          1/1     1            1           3m31s
+riti-web          1/1     1            1           2m31s
+rohan-mysql       1/1     1            1           20m
+rohan-web         1/1     1            1           3m33s
+sandhya-adminer   1/1     1            1           108s
+sandhya-mysql     1/1     1            1           20m
+sid-mysql         1/1     1            1           14m
+sid-web-app       1/1     1            1           2m9s
+trng-mysql        1/1     1            1           12m
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  expose deployment  ashu-web --type ClusterIP --port 8080 --name ashu-web-lb --dry-run=client -o yaml  >ashu-web-svc.yaml
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc create -f .\ashu-web-svc.yaml
+service/ashu-web-lb created
+
+```
