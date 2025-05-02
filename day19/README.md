@@ -58,4 +58,29 @@ spec:
 status: {}
 
 
+===> MYsql service creation to connect mysql pod 
+
+-->
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  get  deploy
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE  
+amit-mysql      1/1     1            1           7m55s
+ashu-mysql      1/1     1            1           7m31s
+asif-deploy     0/1     1            0           24m  
+jh-mysql        0/1     1            0           9m25s
+manoj-mysql     1/1     1            1           7m30s
+rayu-mysql      1/1     1            1           5m34s
+rohan-mysql     1/1     1            1           7m23s
+sandhya-mysql   1/1     1            1           7m9s 
+sid-mysql       1/1     1            1           85s  
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  expose deployment  ashu-mysql --type ClusterIP --port 3306 --name ash-db-lb       
+  --dry-run=client -o yaml >mysql_svc.yaml
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc create -f .\mysql_svc.yaml   
+service/ash-db-lb created
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  get  svc
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+ash-db-lb    ClusterIP   172.30.72.231   <none>        3306/TCP   4s 
+kubernetes   ClusterIP   172.30.0.1      <none>        443/TCP    83m
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> 
+
+
 ```
