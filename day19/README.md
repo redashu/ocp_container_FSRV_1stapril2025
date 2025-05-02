@@ -168,3 +168,29 @@ ashu-route   ashu-route-default.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io        
 PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app>
 
 ```
+
+### final diagram to connect pod to pod in 2t app 
+
+<img src="f1.png">
+
+
+### tip of the day 
+
+```
+PS C:\Users\labuser\Desktop\ashu-project> oc  delete  -f  .\ashu-2t-app\
+service "ashu-web-lb" deleted
+deployment.apps "ashu-web" deleted
+secret "ashu-db-creds" deleted
+deployment.apps "ashu-mysql" deleted
+service "ash-db-lb" deleted
+route.route.openshift.io "ashu-route" deleted
+PS C:\Users\labuser\Desktop\ashu-project> 
+PS C:\Users\labuser\Desktop\ashu-project> oc create   -f  .\ashu-2t-app\
+service/ashu-web-lb created
+deployment.apps/ashu-web created
+secret/ashu-db-creds created
+deployment.apps/ashu-mysql created
+service/ash-db-lb created
+route.route.openshift.io/ashu-route created
+
+```
