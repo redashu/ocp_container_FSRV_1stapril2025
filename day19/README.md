@@ -48,13 +48,14 @@ spec:
         name: mysql
         env: # to call any ENV present in container image 
         - name: MYSQL_ROOT_PASSWORD
-          fromValue: # reading value from somewhere 
-            secretRef: # calling ocp secret 
+          valueFrom: # reading value from somewhere 
+            secretKeyRef: # calling ocp secret 
               name: ashu-db-creds # name of secret 
               key: my-pass # key of secret 
         ports:
         - containerPort: 3306
         resources: {}
 status: {}
+
 
 ```
