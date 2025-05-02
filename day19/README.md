@@ -156,4 +156,15 @@ PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  expose deployment  ash
 PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc create -f .\ashu-web-svc.yaml
 service/ashu-web-lb created
 
+
+===> Creating route of web app service to expose outside ocp cluster 
+
+oc  expose svc ashu-web-lb --port 8080 --name ashu-route --dry-run=client -o yaml >web_route.yaml 
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc create -f .\web_route.yaml
+route.route.openshift.io/ashu-route created
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app> oc  get  route
+NAME         HOST/PORT                                                     PATH   SERVICES      PORT   TERMINATION   WILDCARD
+ashu-route   ashu-route-default.apps.hm9pf1p6kad6e4221e.eastus.aroapp.io          ashu-web-lb   8080                 None
+PS C:\Users\labuser\Desktop\ashu-project\ashu-2t-app>
+
 ```
