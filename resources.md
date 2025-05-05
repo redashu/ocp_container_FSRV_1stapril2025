@@ -37,5 +37,9 @@
 [click_here](https://github.com/redashu/k8s/tree/helm)
 
 
+### HPA 
+
+[click_here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+
 
 

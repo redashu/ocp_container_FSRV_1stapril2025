@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: "2025-05-05T13:18:29Z"
+  name: ashu-dep2 # name of HPA 
+  namespace: default
+  resourceVersion: "7162374"
+  uid: 83192c01-8940-4bf7-bd91-30cbfaadb023
+spec:
+  maxReplicas: 15
+  metrics:
+  - resource:
+      name: memory # resource target 
+      target:
+        averageUtilization: 80 # in percentage
+        type: Utilization
+    type: Resource
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ashu-dep1 # name of deployment

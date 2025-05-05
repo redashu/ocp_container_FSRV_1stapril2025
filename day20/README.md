@@ -116,3 +116,125 @@ amit-web-app-2   Docker   Git@e3f7d67   Running    1 second ago
 
 ```
 
+## HPA in ocp / k8s 
+
+<img src="hpa.png">
+
+### checking pod / node resources consumption in k8s / ocp 
+
+```
+humanfirmware@darwin  ~/Desktop  kubectl top  pod
+NAME                            CPU(cores)   MEMORY(bytes)   
+ashu-dep1-6695ccb844-b2rvv      0m           4Mi             
+asif-deploy-76c8857bc9-wntwc    1m           7Mi             
+rayu-dep1-6c9fc5c9d-hr4fc       1m           35Mi            
+rohan-deploy-66f96f799d-gl9vm   1m           41Mi            
+ humanfirmware@darwin  ~/Desktop  kubectl top  pod
+NAME                            CPU(cores)   MEMORY(bytes)   
+ashu-dep1-6695ccb844-b2rvv      0m           4Mi             
+asif-deploy-76c8857bc9-wntwc    1m           7Mi             
+jh-deploy-74c464d69f-9dvqh      1m           43Mi            
+rayu-dep1-6c9fc5c9d-hr4fc       1m           35Mi            
+rohan-deploy-66f96f799d-gl9vm   1m           41Mi            
+sid-dep1-5df4cc5d47-5qgrj       0m           4Mi             
+ humanfirmware@darwin  ~/Desktop  
+ humanfirmware@darwin  ~/Desktop  
+ humanfirmware@darwin  ~/Desktop  oc  adm top pods
+NAME                            CPU(cores)   MEMORY(bytes)   
+ashu-dep1-6695ccb844-b2rvv      0m           4Mi             
+asif-deploy-76c8857bc9-wntwc    1m           7Mi             
+jh-deploy-74c464d69f-9dvqh      1m           43Mi            
+rayu-dep1-6c9fc5c9d-hr4fc       1m           35Mi            
+rohan-deploy-66f96f799d-gl9vm   1m           41Mi            
+sid-dep1-5df4cc5d47-5qgrj       0m           4Mi             
+ humanfirmware@darwin  ~/Desktop  oc  adm top  node
+NAME                                        CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+fiserv-cluster-9dkff-master-0               519m         6%     6882Mi          24%       
+fiserv-cluster-9dkff-master-1               927m         11%    8519Mi          30%       
+fiserv-cluster-9dkff-master-2               722m         9%     9271Mi          33%       
+fiserv-cluster-9dkff-worker-eastus1-rwvz2   867m         22%    6518Mi          50%       
+fiserv-cluster-9dkff-worker-eastus2-rfppk   725m         18%    6205Mi          48%       
+fiserv-cluster-9dkff-worker-eastus3-cnwzm   155m         3%     2526Mi          19%       
+ humanfirmware@darwin  ~/Desktop  
+
+
+```
+
+## HPA will only work if metric server is gathering pod resoruces details
+
+<img src="mon1.png">
+
+
+### HPA rule on behalf of cpu consumption 
+
+```
+humanfirmware@darwin  ~/Desktop  oc get deploy
+
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-dep1      1/1     1            1           10m
+asif-deploy    1/1     1            1           10m
+bhanu-dep1     1/1     1            1           7m16s
+jh-deploy      1/1     1            1           8m57s
+rayu-dep1      1/1     1            1           10m
+rohan-deploy   1/1     1            1           11m
+san-dep1       1/1     1            1           8m
+sid-dep1       1/1     1            1           9m27s
+ humanfirmware@darwin  ~/Desktop  
+ humanfirmware@darwin  ~/Desktop  oc  autoscale  deployment  ashu-dep1  --cpu-percent 70  --min 2 --max 15 
+horizontalpodautoscaler.autoscaling/ashu-dep1 autoscaled
+ humanfirmware@darwin  ~/Desktop  
+ humanfirmware@darwin  ~/Desktop  oc get  hpa
+NAME          REFERENCE                TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+ashu-dep1     Deployment/ashu-dep1     <unknown>/70%   2         15        0          6s
+asif-deploy   Deployment/asif-deploy   <unknown>/70%   2         15        0          1s
+ humanfirmware@darwin  ~/Desktop  
+ humanfirmware@darwin  ~/Desktop  oc get deploy                                                            
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-dep1      2/2     2            2           12m
+asif-deploy    2/2     2            2           11m
+bhanu-dep1     1/1     1            1           8m53s
+jh-deploy      1/1     1            1           10m
+rayu-dep1      2/2     2            2           12m
+rohan-deploy   1/1     1            1           12m
+san-dep1       1/1     1            1           9m37s
+sid-dep1       1/1     1            1           11m
+ humanfirmware@darwin  ~/Desktop  
+
+```
+
+### HPA yaml file 
+
+```
+humanfirmware@darwin  ~/Desktop  oc get  hpa  
+NAME           REFERENCE                 TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+ashu-dep1      Deployment/ashu-dep1      0%/70%          2         15        2          3m17s
+asif-deploy    Deployment/asif-deploy    1%/70%          2         15        2          3m12s
+jh-deploy      Deployment/jh-deploy      2%/70%          2         15        2          2m47s
+rayu-dep1      Deployment/rayu-dep1      1%/70%          2         15        2          3m8s
+rohan-deploy   Deployment/rohan-deploy   <unknown>/70%   2         15        0          5s
+sid-dep1       Deployment/sid-dep1       0%/70%          2         15        2          77s
+ humanfirmware@darwin  ~/Desktop  oc get  hpa  ashu-dep1  -o yaml 
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: "2025-05-05T13:18:29Z"
+  name: ashu-dep1
+  namespace: default
+  resourceVersion: "7160560"
+  uid: 83192c01-8940-4bf7-bd91-30cbfaadb023
+spec:
+  maxReplicas: 15
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 70
+        type: Utilization
+    type: Resource
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ashu-dep1
+
+```
