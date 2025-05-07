@@ -1,0 +1,49 @@
+apiVersion: v1
+baseDomain: ashutoshh.xyz
+controlPlane:   
+  hyperthreading: Enabled 
+  name: master
+  platform:
+    aws:
+      zones:
+      - us-east-1a
+      - us-east-1b
+      rootVolume:
+        iops: 400
+        size: 100
+        type: io1 
+      type: t3a.xlarge
+  replicas: 3
+compute: 
+- hyperthreading: Enabled 
+  name: worker
+  platform:
+    aws:
+      rootVolume:
+        iops: 200
+        size: 100
+        type: io1 
+      type: t3a.xlarge
+      zones:
+      - us-east-1c
+  replicas: 2
+metadata:
+  name: test-cluster 
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: us-east-1
+    userTags:
+      adminContact: jdoe
+      costCenter: 7536
+fips: false 
+sshKey: ssh-rsa AAAAB3 # paste ssh pubic key here 
+pullSecret: '{"auths":{"cloud.o' # paste redhat pull secrets here

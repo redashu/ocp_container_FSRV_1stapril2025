@@ -42,4 +42,12 @@
 [click_here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 
 
+### Redhat hybrid cloud platform 
+
+[click](https://console.redhat.com/openshift)
+
+
+### CRC url 
+
+[click_here](https://www.redhat.com/en/blog/codeready-containers)
 

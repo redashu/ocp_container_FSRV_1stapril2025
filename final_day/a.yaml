@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ashupod1
+  labels:
+    app: ashupod1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashupod1
+  template:
+    metadata:
+      labels:
+        app: ashupod1
+    spec:
+      containers:
+      - name: ashupod1
+        image: nginx
+        resources: {}
